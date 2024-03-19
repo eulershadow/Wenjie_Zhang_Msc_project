@@ -6,6 +6,22 @@ import os
 
 device = "cuda"
 
+#uncomplete
+def read_anuexdata(data):
+    return_data = []
+
+    age = data["age"]       
+    sex = data["sex"]
+    if sex == "female" or sex == "woman":
+        sex = [0,1]
+    else:
+        sex = [1,0]
+    return_data.extend(age)
+    return_data.extend(sex)
+
+    return return_data
+
+
 def stats(loader, net):
     correct = 0
     total = 0
