@@ -3,23 +3,11 @@ import torch
 import torch.nn as nn
 import matplotlib as plt
 import os
+import numpy as np
+import copy
+import seaborn as sns
 
 device = "cuda"
-
-#uncomplete
-def read_anuexdata(data):
-    return_data = []
-
-    age = data["age"]       
-    sex = data["sex"]
-    if sex == "female" or sex == "woman":
-        sex = [0,1]
-    else:
-        sex = [1,0]
-    return_data.extend(age)
-    return_data.extend(sex)
-
-    return return_data
 
 
 def stats(loader, net):
@@ -29,15 +17,19 @@ def stats(loader, net):
     n = 0    # counter for number of minibatches
     with torch.no_grad():
         for data in loader:
-            images, labels = data
+            inputs_v, _, labels = data
             
             loss_fn = nn.CrossEntropyLoss()
 
             #to work with gpu you will need to load data and labels to gpu
-            images = images.to(device)
+            inputs_v = inputs_v.to(device)
             labels = labels.to(device)
+            
+            inputs_v = inputs_v.to(torch.float32)
+            inputs_v = inputs_v.squeeze(1).permute(0, 2, 1)
+            labels = labels.to(torch.long)
 
-            outputs = net.forward(images)
+            outputs = net.forward(inputs_v)
 
             # accumulate loss
             running_loss += loss_fn(outputs, labels)
@@ -67,11 +59,18 @@ def run_model_get(train_loader_input,vaild_loader_input,nepochs, modelnet,result
             dataset.transform_image(transform)  
                         
         for data in train_loader_input:
-            inputs, labels = data
+            inputs, _, labels = data
             #noised_inputs=torch.randn_like(inputs)+inputs
             #to work with gpu you will need to load data and labels to gpu
+            
+            
             inputs = inputs.to(device)
             labels = labels.to(device)
+            
+            inputs = inputs.to(torch.float32)
+            inputs = inputs.squeeze(1).permute(0, 1, 2)
+            labels = labels.to(torch.float32)
+            #print(labels)
             modelnet.optimizer.zero_grad()
             # Forward, backward, and update parameters
             loss = modelnet.fit(inputs, labels) # note: .to(device) helps to load data to your gpu
@@ -99,7 +98,16 @@ def run_model_get(train_loader_input,vaild_loader_input,nepochs, modelnet,result
     torch.save({"state_dict": modelnet.state_dict(), "stats": statsrec}, saveCkpt)
 
 
+def save_model(net,model_path):
+    model_path = model_path
+    torch.save(net.state_dict(), model_path)
+    return True
 
+def load_model(net,model_path):
+    net_copy = copy.deepcopy(net)
+    model_path = model_path
+    net_copy.load_state_dict(torch.load(model_path))
+    return net_copy
 
 def show_graph(path,device):
     data = torch.load(path, map_location=device) # by doing map_location=device, you can use trained model on GPU --> to test on CPU
@@ -119,3 +127,31 @@ def show_graph(path,device):
     fig.savefig("roc.svg")
     plt.show()
     
+def test():
+    print("test4")
+    
+def dim4_cm (real, pred):
+
+    cm = [[0,0,0,0],[0,0,0,0]]
+    for i in range(len(pred)):
+        pos = 0
+        if float(pred[i]) < 0.25:
+            pos = 0
+        elif 0.25 <= float(pred[i]) < 0.5:
+            pos = 1
+        elif 0.8 > float(pred[i]) >= 0.5:
+            pos = 2
+        elif float(pred[i]) >= 0.8:
+            pos = 3
+            
+        if real[i] == 0:
+
+            cm[0][pos] += 1
+        else:
+            cm[1][pos] += 1
+    return cm
+
+def show_pred_cm(data_predictions, test_set_target):
+    #cm = confusion_matrix(list(test_set_target), data_predictions)
+    cm = dim4_cm(list(test_set_target), data_predictions)
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=["Pred Unrupture","Pred uncertain Unrupture","Pred uncertain Rupture","Pred Rupture"], yticklabels=["Real Unrupture"," Real Rupture"])

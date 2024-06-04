@@ -1,0 +1,102 @@
+source,dataset,hospital,status,location,side,sex,age,patientID,vesselFileID,cutToShow
+aneurisk,C0001,Milan,unruptured,ICA oph,right,female,53,P0085,C0001,cut1
+aneurisk,C0002,Milan,unruptured,ICA oph,left,female,35,P0112,C0002,cut2
+aneurisk,C0003,Milan,unruptured,ICA pcom,left,female,43,P0115,C0003,cut2
+aneurisk,C0005,Milan,ruptured,ICA pcom,right,female,26,P0118,C0005,cut1
+aneurisk,C0006,Milan,unruptured,ICA oph,right,female,45,P0121,C0006,cut1
+aneurisk,C0007a,Milan,unruptured,ICA oph,left,female,44,P0126,C0007,cut1
+aneurisk,C0008,Milan,ruptured,AComA,mid-left,male,68,P0152,C0008,cut2
+aneurisk,C0009,Milan,ruptured,AComA,mid-left,female,39,P0172,C0009,cut2
+aneurisk,C0010,Milan,unruptured,AComA,mid-left,female,63,P0173,C0010,cut2
+aneurisk,C0011,Milan,unruptured,AComA,mid-left,male,48,P0175,C0011,cut2
+aneurisk,C0012,Milan,ruptured,AComA,mid-left,male,62,P0176,C0012,cut2
+aneurisk,C0013,Milan,ruptured,ICA pcom,right,female,85,P0197,C0013,cut1
+aneurisk,C0014,Milan,unruptured,ICA oph,left,female,68,P0199,C0014,cut1
+aneurisk,C0015,Milan,ruptured,ICA pcom,right,female,56,P0202,C0015,cut2
+aneurisk,C0016,Milan,unruptured,ICA oph,left,female,42,P0203,C0016,cut2
+aneurisk,C0017,Milan,ruptured,ICA pcom,right,female,54,P0208,C0017,cut1
+aneurisk,C0018,Milan,ruptured,ICA pcom,right,female,36,P0231,C0018,cut1
+aneurisk,C0019,Milan,unruptured,MCA M1,right,male,48,P0232,C0019,cut2
+aneurisk,C0020,Milan,unruptured,MCA bif,left,female,51,P0238,C0020,cut2
+aneurisk,C0021,Milan,ruptured,AComA,mid-left,male,36,P0246,C0021,cut2
+aneurisk,C0023,Milan,ruptured,MCA bif,left,male,52,P0269,C0023,cut2
+aneurisk,C0024,Milan,unruptured,ICA oph,left,female,35,P0273,C0024,cut1
+aneurisk,C0025a,Milan,unruptured,ICA oph,left,male,74,P0275,C0025,cut1
+aneurisk,C0026,Milan,unruptured,ICA oph,left,female,42,P0276,C0026,cut1
+aneurisk,C0027,Milan,ruptured,ICA pcom,right,female,64,P0278,C0027,cut2
+aneurisk,C0028a,Milan,ruptured,MCA bif,right,female,77,P0284,C0028a,cut2
+aneurisk,C0028b,Milan,unruptured,MCA M1,right,female,77,P0284,C0028b,cut2
+aneurisk,C0029,Milan,ruptured,MCA bif,,male,43,P0285,C0029,cut2
+aneurisk,C0030,Milan,unruptured,MCA bif,left,female,59,P0287,C0030,cut1
+aneurisk,C0031,Milan,ruptured,ICA pcom,right,female,74,P0087,C0031,cut1
+aneurisk,C0032,Milan,ruptured,BA tip,midline,male,74,P0088,C0032,cut2
+aneurisk,C0033,Milan,unruptured,AComA,mid-left,male,69,P0089,C0033,cut2
+aneurisk,C0034,Milan,unruptured,ICA oph,right,female,42,P0091,C0034,cut1
+aneurisk,C0035,Milan,unruptured,ICA oph,left,female,57,P0106,C0035,cut2
+aneurisk,C0036,Milan,unruptured,ICA pcom,right,male,52,P0108,C0036,cut2
+aneurisk,C0037,Milan,ruptured,ICA pcom,right,male,53,P0109,C0037,cut2
+aneurisk,C0038,Milan,ruptured,ICA pcom,left,female,74,P0110,C0038,cut1
+aneurisk,C0039a,Milan,unruptured,ICA oph,left,female,59,P0111,C0039,cut2
+aneurisk,C0040,Milan,unruptured,ICA pcom,left,male,62,P0113,C0040,cut1
+aneurisk,C0041,Milan,unruptured,ICA oph,right,female,73,P0114,C0041,cut1
+aneurisk,C0042,Milan,unruptured,ICA pcom,left,female,45,P0117,C0042,cut1
+aneurisk,C0043,Milan,ruptured,BA,midline,female,66,P0123,C0043,cut1
+aneurisk,C0044,Milan,unruptured,MCA M1,,male,61,P0124,C0044,cut1
+aneurisk,C0045,Milan,unruptured,MCA bif,left,male,38,P0127,C0045,cut1
+aneurisk,C0046,Milan,unruptured,ICA bif,right,male,56,P0131,C0046,cut2
+aneurisk,C0047,Milan,ruptured,AComA,mid-left,female,49,P0141,C0047,cut2
+aneurisk,C0048,Milan,ruptured,AComA,mid-left,male,43,P0142,C0048,cut2
+aneurisk,C0049a,Milan,unruptured,MCA bif,left,male,41,P0146,C0049,cut2
+aneurisk,C0050,Milan,ruptured,MCA bif,right,male,51,P0147,C0050,cut1
+aneurisk,C0051,Milan,ruptured,MCA bif,right,male,53,P0150,C0051,cut2
+aneurisk,C0052,Milan,ruptured,AComA,mid-left,male,55,P0154,C0052,cut1
+aneurisk,C0053,Milan,ruptured,AComA,mid-right,male,45,P0155,C0053,cut2
+aneurisk,C0054,Milan,unruptured,BA tip,midline,male,62,P0161,C0054,cut2
+aneurisk,C0055,Milan,unruptured,AComA,mid-left,male,65,P0164,C0055,cut2
+aneurisk,C0056,Milan,ruptured,AComA,mid-left,female,51,P0168,C0056,cut2
+aneurisk,C0057a,Milan,ruptured,AComA,mid-left,male,71,P0170,C0057a,cut2
+aneurisk,C0057b,Milan,unruptured,MCA bif,left,male,71,P0170,C0057b,cut2
+aneurisk,C0058,Milan,ruptured,AComA,mid-left,female,74,P0171,C0058,cut2
+aneurisk,C0059,Milan,ruptured,AComA,mid-left,male,41,P0174,C0059,cut2
+aneurisk,C0060,Milan,unruptured,AComA,mid-left,male,49,P0177,C0060,cut2
+aneurisk,C0061,Milan,ruptured,PeriA,,female,24,P0189,C0061,cut2
+aneurisk,C0062,Milan,ruptured,ICA pcom,right,female,68,P0198,C0062,cut2
+aneurisk,C0063,Milan,unruptured,ICA pcom,right,female,56,P0200,C0063,cut1
+aneurisk,C0064,Milan,unruptured,ICA oph,right,female,64,P0201,C0064,cut1
+aneurisk,C0065,Milan,ruptured,ICA oph,left,male,47,P0204,C0065,cut1
+aneurisk,C0066,Milan,unruptured,ICA bif,right,female,58,P0205,C0066,cut2
+aneurisk,C0067,Milan,unruptured,ICA oph,left,female,42,P0206,C0067,cut1
+aneurisk,C0068,Milan,ruptured,BA tip,,female,33,P0211,C0068,cut2
+aneurisk,C0069,Milan,unruptured,MCA bif,right,female,43,P0219,C0069,cut2
+aneurisk,C0070,Milan,unruptured,MCA bif,right,female,63,P0221,C0070,cut2
+aneurisk,C0071,Milan,unruptured,MCA bif,left,male,51,P0222,C0071,cut2
+aneurisk,C0072,Milan,unruptured,MCA bif,right,male,72,P0223,C0072,cut2
+aneurisk,C0073,Milan,ruptured,MCA bif,right,female,49,P0225,C0073,cut2
+aneurisk,C0074a,Milan,unruptured,ICA chor,right,female,32,P0234,C0074a,cut2
+aneurisk,C0074b,Milan,unruptured,MCA M1,right,female,32,P0234,C0074b,cut2
+aneurisk,C0075,Milan,unruptured,ICA pcom,right,female,74,P0235,C0075,cut1
+aneurisk,C0076,Milan,unruptured,ICA pcom,left,female,78,P0236,C0076,cut2
+aneurisk,C0077,Milan,unruptured,MCA bif,left,male,63,P0237,C0077,cut2
+aneurisk,C0078,Milan,unruptured,MCA bif,right,female,28,P0239,C0078,cut2
+aneurisk,C0079,Milan,unruptured,AComA,mid-right,female,65,P0240,C0079,cut2
+aneurisk,C0080,Milan,ruptured,AComA,mid-left,female,38,P0241,C0080,cut2
+aneurisk,C0081,Milan,ruptured,AComA,mid-left,female,74,P0242,C0081,cut2
+aneurisk,C0082,Milan,ruptured,AComA,mid-left,female,35,P0244,C0082,cut2
+aneurisk,C0083,Milan,ruptured,AComA,mid-right,female,66,P0245,C0083,cut2
+aneurisk,C0084,Milan,ruptured,AComA,mid-left,male,49,P0247,C0084,cut2
+aneurisk,C0085,Milan,ruptured,ICA oph,right,female,64,P0253,C0085,cut2
+aneurisk,C0086,Milan,unruptured,ICA cav,left,female,61,P0254,C0086,cut1
+aneurisk,C0087a,Milan,unruptured,MCA bif,left,female,59,P0255,C0087,cut2
+aneurisk,C0088a,Milan,unruptured,ICA oph,right,female,59,P0259,C0088a,cut1
+aneurisk,C0088b,Milan,unruptured,ICA pcom,right,female,59,P0259,C0088b,cut1
+aneurisk,C0089,Milan,unruptured,ICA oph,left,female,48,P0260,C0089,cut1
+aneurisk,C0090,Milan,unruptured,ICA oph,right,female,42,P0262,C0090,cut1
+aneurisk,C0091,Milan,unruptured,BA tip,midline,male,49,P0265,C0091,cut2
+aneurisk,C0092,Milan,ruptured,MCA bif,right,male,62,P0266,C0092,cut2
+aneurisk,C0093,Milan,unruptured,MCA bif,right,male,67,P0267,C0093,cut1
+aneurisk,C0094,Milan,ruptured,MCA bif,left,female,36,P0268,C0094,cut2
+aneurisk,C0095,Milan,unruptured,BA tip,midline,female,43,P0270,C0095,cut2
+aneurisk,C0096,Milan,ruptured,BA tip,midline,male,67,P0271,C0096,cut2
+aneurisk,C0097,Milan,ruptured,ICA pcom,left,female,84,P0274,C0097,cut2
+aneurisk,C0098,Milan,ruptured,MCA bif,right,female,59,P0286,C0098,cut2
+aneurisk,C0099,Milan,unruptured,MCA bif,right,female,42,P0288,C0099,cut2
