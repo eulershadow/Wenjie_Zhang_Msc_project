@@ -14,17 +14,19 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
 from torch import optim
+import open3d as o3d
+import vtk
 
 import scipy.spatial.distance
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
-from PointNet_struct import PointNet,PointNet_2Multihead,PointNet_3Multihead
+from .PointNet_struct import PointNet,PointNet_2Multihead,PointNet_3Multihead
 import seaborn as sns
-import functions as fun
-from PointNet_dataset import Aneuxmodel_Dataset
+from . import functions as fun
+from .PointNet_dataset import Aneuxmodel_Dataset,Aneux_Dataset_save,Aneux_Dataset_load
 import data_process_ml
-from PointNet_trainingfunct import run_model_get,run_model_2multi_head,run_model_3multi_head,show_graph,save_model,load_model,dim4_cm_dl
+from .PointNet_trainingfunct import run_model_get,run_model_2multi_head,run_model_3multi_head,show_graph,save_model,load_model,dim4_cm_dl
 
 
 
@@ -49,14 +51,15 @@ morpho_data_patient[morpho_data_patient["cuttype"] == "cut1"]
 #3D data load
 import pandas as pd
 df = pd.DataFrame()
-Aneux_Dataset = Aneuxmodel_Dataset(root = root,
-                                   df=morpho_data_patient[morpho_data_patient["cuttype"] == "dome"],
-                                   transform = transforms.ToTensor(),
-                                   mesh = "area-001",
-                                   cuttype = "dome",
-                                   crop = False,
-                                   points = 1000,
-                                   limit = 700)
+# Aneux_Dataset = Aneuxmodel_Dataset(root = root,
+#                                    df=morpho_data_patient[morpho_data_patient["cuttype"] == "dome"],
+#                                    transform = transforms.ToTensor(),
+#                                    mesh = "area-001",
+#                                    cuttype = "dome",
+#                                    crop = False,
+#                                    points = 1000,
+#                                    limit = 700)
+Aneux_Dataset = Aneux_Dataset_load("./Aneux_Dataset_1000pt_sample_clip")
 
 print(len(Aneux_Dataset.model_table),len(Aneux_Dataset.label))
 

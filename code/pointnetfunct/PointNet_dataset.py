@@ -7,6 +7,8 @@ import math, random
 import data_process_ml
 random.seed = 42
 import copy
+import sys
+sys.path.append("..")
 
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -18,11 +20,13 @@ import scipy.spatial.distance
 # import plotly.express as px
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
-from model_loader import reduce_mesh,mesh_to_point_cloud,vtp_to_mesh,vtp_to_point_cloud,vtp_to_point_cloud_cutvessel
+from .model_loader import reduce_mesh,mesh_to_point_cloud,vtp_to_mesh,vtp_to_point_cloud,vtp_to_point_cloud_cutvessel
+import open3d as o3d
+import pandas as pd
 
 class Aneuxmodel_Dataset(Dataset):
 
-    def __init__(self, df, root = "", transform = None,mesh = "area-001",cuttype = "dome",crop = False,points= 1000, limit = 700):
+    def __init__(self, df = pd.DataFrame(), root = "", transform = None,mesh = "area-001",cuttype = "dome",crop = False,points= 1000, limit = 700,load = True,paraout = False):
 
         self.root = root
         self.points = points
@@ -31,10 +35,11 @@ class Aneuxmodel_Dataset(Dataset):
         self.mesh = mesh
         self.cuttype = cuttype
         self.crop = crop
+        self.paraout = paraout
         if self.cuttype!= "dome" and self.cuttype!= "cut1":
             return "type error"
         
-        self.df = df
+        self.df = df[df["cuttype"] == cuttype]
         self.label = []
         self.vessel_model_file = []
         self.cut1_model_file = []
@@ -43,10 +48,26 @@ class Aneuxmodel_Dataset(Dataset):
         
         self.cropdome_vessel_file = []
         self.cropcut1_vessel_file = []
-        
-        self.training_data_load()
-        self.label_loader()
         self.my_device = "cuda:0"
+        
+        merged_dataset = data_process_ml.encode_column(df)
+        merged_dataset = data_process_ml.drop_columns(merged_dataset)
+        morpho_data_cut1,morpho_data_dome = data_process_ml.output_cut1anddome(merged_dataset)
+        
+        self.raw_data = copy.deepcopy(morpho_data_dome)
+        self.raw_data = self.raw_data.astype(float)
+        
+        self.raw_data.loc[self.raw_data['sex_male'] == 0, 'sex_male'] = 2
+        #print(self.raw_data.iloc[0])
+        self.raw_data.drop(("status_ruptured"),axis=1,inplace=True)
+        self.raw_data.drop(("sex_female"),axis=1,inplace=True)
+        self.raw_data.drop(("age"),axis=1,inplace=True)
+        
+        
+        if load:
+            self.training_data_load()
+            self.label_loader()
+            
         
             
     def label_loader(self):
@@ -208,6 +229,10 @@ class Aneuxmodel_Dataset(Dataset):
                 vessel_model_crop = self.transform(vessel_model_crop)
             
         label_return = self.label[index]
+        
+        if self.paraout:
+            parameter = torch.from_numpy(np.array(self.raw_data.iloc[index],dtype = np.float64))
+            return vessel_model,cut_model,parameter, label_return
         if self.crop: 
             return vessel_model,cut_model,vessel_model_crop, label_return
         return vessel_model,cut_model,label_return
@@ -215,3 +240,50 @@ class Aneuxmodel_Dataset(Dataset):
     def __len__(self):
                                 
         return len(self.model_table)
+    
+    
+def Aneux_Dataset_save(dataset, filepath):
+        data = {
+            'df': dataset.df,
+            #'raw_data': dataset.raw_data,
+            'root': dataset.root,
+            'transform': dataset.transform,
+            'mesh': dataset.mesh,
+            'cuttype': dataset.cuttype,
+            'crop': dataset.crop,
+            'points': dataset.points,
+            'label': dataset.label.numpy(),
+            'limit': dataset.limit,
+            'vessel_model_file': [np.asarray(pcd.points) for pcd in dataset.vessel_model_file],
+            'cut1_model_file': [np.asarray(pcd.points) for pcd in dataset.cut1_model_file],
+            'dome_model_file': [np.asarray(pcd.points) for pcd in dataset.dome_model_file],
+            'model_table': dataset.model_table,
+            'cropdome_vessel_file': [np.asarray(pcd.points) for pcd in dataset.cropdome_vessel_file],
+            'cropcut1_vessel_file': [np.asarray(pcd.points) for pcd in dataset.cropcut1_vessel_file],
+        }
+        torch.save(data, filepath)
+    
+def Aneux_Dataset_load(filepath):
+    data = torch.load(filepath)
+    dataset = Aneuxmodel_Dataset(
+        df=data['df'],
+        
+        root=data['root'],
+        transform=data['transform'],
+        mesh=data['mesh'],
+        cuttype=data['cuttype'],
+        crop=data['crop'],
+        points=data['points'],
+        limit = data['limit'],
+        load = False
+    )
+    dataset.label = torch.from_numpy(data['label'])
+    #dataset.raw_data = data['raw_data']
+    dataset.vessel_model_file = [o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pts)) for pts in data['vessel_model_file']]
+    dataset.cut1_model_file = [o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pts)) for pts in data['cut1_model_file']]
+    dataset.dome_model_file = [o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pts)) for pts in data['dome_model_file']]
+    dataset.model_table = data['model_table']
+    dataset.cropdome_vessel_file = [o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pts)) for pts in data['cropdome_vessel_file']]
+    dataset.cropcut1_vessel_file = [o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pts)) for pts in data['cropcut1_vessel_file']]
+        
+    return dataset

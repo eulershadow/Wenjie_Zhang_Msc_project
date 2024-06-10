@@ -75,8 +75,8 @@ class Transform(nn.Module):
         #print(xb)
 
         xb = F.relu(self.bn1(self.conv1(xb)))
-        # xb = F.relu(self.bn4(self.fc1(xb)))
-        # xb = F.relu(self.bn5(self.fc2(xb)))
+        xb = F.relu(self.bn4(self.fc1(xb)))
+        xb = F.relu(self.bn5(self.fc2(xb)))
 
         matrix64x64 = self.feature_transform(xb)
         xb = torch.bmm(torch.transpose(xb,1,2), matrix64x64).transpose(1,2)
@@ -85,9 +85,9 @@ class Transform(nn.Module):
         xb = F.relu(self.bn2(self.conv2(xb)))
         xb = self.bn3(self.conv3(xb))
         
-        # xb = F.relu(self.bn1(self.fc3(xb)))
-        # xb = F.relu(self.bn2(self.fc4(xb)))
-        # xb = self.bn3(self.fc5(xb))
+        xb = F.relu(self.bn1(self.fc3(xb)))
+        xb = F.relu(self.bn2(self.fc4(xb)))
+        xb = self.bn3(self.fc5(xb))
         
         xb = nn.MaxPool1d(xb.size(-1))(xb)
         output = nn.Flatten(1)(xb)

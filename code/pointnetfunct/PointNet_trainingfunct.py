@@ -1,9 +1,8 @@
 import vtk
 import os
 import numpy as np
-import itertools
 import math, random
-import data_process_ml
+from . import data_process_ml
 random.seed = 42
 import copy
 

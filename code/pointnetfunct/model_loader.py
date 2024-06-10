@@ -2,9 +2,8 @@ import open3d as o3d
 import vtk
 import os
 import numpy as np
-import itertools
 import math, random
-import data_process_ml
+from . import data_process_ml
 random.seed = 42
 import copy
 
@@ -87,11 +86,94 @@ def vtp_to_point_cloud_cutvessel(vessel_file_path,cut_file_path, points = 10000)
     reduced_mesh =  vessel_mesh.crop(box_mesh) 
     result_mesh = reduce_mesh(vessel_mesh,reduced_mesh)
     #print(cut1_mesh,result_mesh)
-    if vessel_mesh.vertices == result_mesh.vertices:
-        return False
+    # if vessel_mesh.vertices == result_mesh.vertices:
+    #     return False
                   
     #o3d.visualization.draw_geometries([result_mesh])
     #o3d.visualization.draw_geometries([reduced_mesh])
     
     point_cloud = result_mesh.sample_points_uniformly(number_of_points=points) # Adjust number_of_points as needed
+    return point_cloud
+
+def farthest_point_sampling(points, num_samples):
+    """
+    Perform farthest point sampling (FPS) on a set of points.
+    
+    Parameters:
+    - points (numpy array): The input point set (Nx3).
+    - num_samples (int): The number of samples to be selected.
+    
+    Returns:
+    - sampled_points (numpy array): The sampled points (num_samples x 3).
+    """
+    N, D = points.shape
+    sampled_indices = np.zeros(num_samples, dtype=int)
+    distances = np.ones(N) * float('inf')
+    farthest = np.random.randint(0, N)
+    
+    for i in range(num_samples):
+        sampled_indices[i] = farthest
+        centroid = points[farthest]
+        dist = np.sum((points - centroid) ** 2, axis=1)
+        distances = np.minimum(distances, dist)
+        farthest = np.argmax(distances)
+    
+    return points[sampled_indices]
+
+def vtp_to_point_cloud_fps(file_path,points = 10000):
+    mesh = o3d.geometry.TriangleMesh()
+    if ".vtp" not in file_path:
+        mesh = o3d.io.read_triangle_mesh(file_path)
+    else:
+        mesh = vtp_to_mesh(file_path)
+        
+    #o3d.visualization.draw_geometries([mesh])
+    point_cloud_total = mesh.sample_points_uniformly(number_of_points=len(mesh.vertices))
+    if len(mesh.vertices) < points:
+        point_cloud_total = mesh.sample_points_uniformly(number_of_points=points)        
+    
+    point_cloud_total = np.asarray(point_cloud_total.points)
+    point_cloud_points = farthest_point_sampling(point_cloud_total, points)
+    
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(point_cloud_points)
+    print(len(point_cloud.points))
+
+    return point_cloud
+
+def vtp_to_point_cloud_cutvessel_fps(vessel_file_path,cut_file_path, points = 10000):
+    """
+    Convert a mesh object to a point cloud object.
+    """
+    if ".vtp" not in vessel_file_path:
+        vessel_mesh = o3d.io.read_triangle_mesh(vessel_file_path)
+    else:
+        vessel_mesh = vtp_to_mesh(vessel_file_path)
+    if ".vtp" not in cut_file_path:
+        cut_mesh = o3d.io.read_triangle_mesh(cut_file_path)
+    else:
+        cut_mesh = vtp_to_mesh(cut_file_path)
+    
+    box_mesh = cut_mesh.get_axis_aligned_bounding_box()
+    reduced_mesh =  vessel_mesh.crop(box_mesh) 
+    result_mesh = reduce_mesh(vessel_mesh,reduced_mesh)
+    #print(cut1_mesh,result_mesh)
+    # if vessel_mesh.vertices == result_mesh.vertices:
+    #     return False
+                  
+    #o3d.visualization.draw_geometries([result_mesh])
+    #o3d.visualization.draw_geometries([reduced_mesh])
+    
+    point_cloud_total = result_mesh.sample_points_uniformly(number_of_points=len(result_mesh.vertices))
+    if len(result_mesh.vertices) < points:
+        point_cloud_total = result_mesh.sample_points_uniformly(number_of_points=points) 
+    
+    #point_cloud = result_mesh.sample_points_uniformly(number_of_points=points) # Adjust number_of_points as needed
+    point_cloud_total = result_mesh.sample_points_uniformly(number_of_points=len(result_mesh.vertices))
+    point_cloud_total = np.asarray(point_cloud_total.points)
+    point_cloud_points = farthest_point_sampling(point_cloud_total, points)
+    
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(point_cloud_points)
+    
     return point_cloud
