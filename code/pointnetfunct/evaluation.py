@@ -236,7 +236,8 @@ def draw_ROC_ml (y_true_binary, y_pred_binary,name):
     plt.show()
 
 def print_values_advance (y_true, y_pred, name):
-    f1 = f1_score(y_true, y_pred)
+    f1_un = f1_score(y_true, y_pred, pos_label=0)
+    f1_ru = f1_score(y_true, y_pred, pos_label=1)
     precision = precision_score(y_true, y_pred, pos_label=1)
     recall = recall_score(y_true, y_pred, pos_label=1)
     precision0 = precision_score(y_true, y_pred, pos_label=0)
@@ -246,7 +247,8 @@ def print_values_advance (y_true, y_pred, name):
     
     accuracy = accuracy_score(y_true, y_pred)
     print(name + f' Accuracy: {accuracy}')
-    print(name + f' F1 score: {f1}')
+    print(name + f' F1 score unrupture: {f1_un}')
+    print(name + f' F1 score rupture: {f1_ru}')
     print( name + f' RMSE: {data_rmse}')
     
     print( name + f' Rupture Recall: {recall}')

@@ -4,7 +4,7 @@ import os
 import numpy as np
 import itertools
 import math, random
-import data_process_ml
+
 random.seed = 42
 import copy
 
@@ -24,7 +24,8 @@ device = "cuda"
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
-import functions as fun
+import pointnetfunct.functions as fun
+import pointnetfunct.data_process_ml as data_process_ml
 
 from pointnetfunct.PointNet_dataset import Aneux_Dataset_load
 from pointnetfunct.PointNet_trainingfunct import run_model_3multi_head_dnn
@@ -62,7 +63,7 @@ Aneux_2000pt_Dataset_ppd_test = Aneux_Dataset_load('./Datasets/Aneux_Dataset_200
 
 def output_result(points = 1000, sample = "uniform", model_type = "pointnet", cuttype = "dome",model_file = ""):
 
-    torch.manual_seed(32381912834800)
+    
 
     Dataset = Aneux_1000pt_Dataset_uniform
     Dataset_test = Aneux_1000pt_Dataset_uniform_test
@@ -101,7 +102,7 @@ def output_result(points = 1000, sample = "uniform", model_type = "pointnet", cu
         
     
         
-
+    torch.manual_seed(32381912834800)
     #load training test and validation set
     train_size = int(len(Dataset) * 0.8) # 80% training data
     valid_size = len(Dataset) - train_size

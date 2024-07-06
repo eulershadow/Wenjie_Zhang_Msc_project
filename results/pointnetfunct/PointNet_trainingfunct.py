@@ -31,7 +31,7 @@ def stats(loader, net):
     n = 0    # counter for number of minibatches
     with torch.no_grad():
         for data in loader:
-            inputs_v, _, _, labels = data
+            _, inputs_v, _, labels = data
             
             loss_fn = nn.CrossEntropyLoss()
 
@@ -75,7 +75,7 @@ def run_model_get(train_loader_input,vaild_loader_input,nepochs, modelnet,result
             dataset.transform_image(transform)  
                         
         for data in train_loader_input:
-            inputs, _, _, labels = data
+            _, inputs, _, labels = data
             #noised_inputs=torch.randn_like(inputs)+inputs
             #to work with gpu you will need to load data and labels to gpu
             
@@ -487,7 +487,7 @@ def stats_2mh_dnn(loader, net):
             
             labels = labels.to(torch.long)
 
-            outputs = net.forward(inputs_v,inputs_v3)
+            outputs = net.forward(inputs_v2,inputs_v3)
 
             # accumulate loss
             running_loss += loss_fn(outputs, labels)
@@ -540,7 +540,7 @@ def run_model_2multi_head_dnn(train_loader_input,vaild_loader_input,nepochs, mod
             #print(labels)
             modelnet.optimizer.zero_grad()
             # Forward, backward, and update parameters
-            loss = modelnet.fit(inputs, inputs3, labels) # note: .to(device) helps to load data to your gpu
+            loss = modelnet.fit(inputs2, inputs3, labels) # note: .to(device) helps to load data to your gpu
             # accumulate loss
             epoch_loss += loss
             n += 1

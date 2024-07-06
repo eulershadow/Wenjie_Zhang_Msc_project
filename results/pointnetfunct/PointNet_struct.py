@@ -107,7 +107,8 @@ class PointNet(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -159,7 +160,8 @@ class PointNet_2Multihead(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -268,7 +270,8 @@ class PointNet_3Multihead(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -331,6 +334,7 @@ class DNNModel(nn.Module):
         
         #Adam
         #self.optimizer = optim.Adam(self.parameters(), lr=0.001) #weight decay
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001)
         self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.running_loss = 0
         self.loss = None
@@ -367,7 +371,8 @@ class PointNet_3Multihead_withDNN(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -427,7 +432,8 @@ class PointNet_2Multimodal_withDNN(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -484,7 +490,8 @@ class PointNet_2Branch(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -544,7 +551,8 @@ class PointNet_3Branch(nn.Module):
         self.dropout = nn.Dropout(p=0.3)
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
-        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -573,6 +581,139 @@ class PointNet_3Branch(nn.Module):
         targets = targets.to(torch.long)
         #print(targets)
         preds = self.forward(input1,input2,input3)
+        #print(targets.dtype)
+        self.loss = self.loss_fn(preds, targets)
+        self.loss.backward()
+        self.optimizer.step()
+        
+        loss_item = self.loss.item()
+        return loss_item
+
+
+    def reset_loss(self, value):
+        self.running_loss = value
+        self.losses = []
+        return
+    
+    
+class Tnet_new(nn.Module):
+    def __init__(self, k=3):
+        super().__init__()
+        self.k=k
+        self.conv1 = nn.Conv1d(k,64,1)
+        self.conv2 = nn.Conv1d(64,128,1)
+        self.conv3 = nn.Conv1d(128,1024,1)
+        self.fc1 = nn.Linear(1024,512)
+        self.fc2 = nn.Linear(512,256)
+        self.fc3 = nn.Linear(1024,k*k)
+
+        self.bn1 = nn.BatchNorm1d(64)
+        self.bn2 = nn.BatchNorm1d(128)
+        self.bn3 = nn.BatchNorm1d(1024)
+        self.bn4 = nn.BatchNorm1d(512)
+        self.bn5 = nn.BatchNorm1d(256)
+
+
+    def forward(self, input):
+        # input.shape == (bs,n,3)
+        bs = input.size(0)
+        xb = F.relu(self.bn1(self.conv1(input)))
+        xb = F.relu(self.bn2(self.conv2(xb)))
+        xb = F.relu(self.bn3(self.conv3(xb)))
+        pool = nn.MaxPool1d(xb.size(-1))(xb)
+        flat = nn.Flatten(1)(pool)
+        # xb = F.relu(self.bn4(self.fc1(flat)))
+        # xb = F.relu(self.bn5(self.fc2(xb)))
+
+        #initialize as identity
+        init = torch.eye(self.k, requires_grad=True).repeat(bs,1,1)
+        if xb.is_cuda:
+            init=init.cuda()
+        matrix = self.fc3(flat).view(-1,self.k,self.k) + init
+        return matrix
+
+class Transform_2Multi_new(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.input_transform = Tnet_new(k=3)
+        self.feature_transform = Tnet_new(k=64)
+        self.conv1 = nn.Conv1d(3,64,1)
+        self.conv2 = nn.Conv1d(64,128,1)
+        self.conv3 = nn.Conv1d(128,512,1)
+
+        self.bn1 = nn.BatchNorm1d(64)
+        self.bn2 = nn.BatchNorm1d(128)
+        self.bn3 = nn.BatchNorm1d(512)
+
+
+    def forward(self, input):
+        
+        matrix3x3 = self.input_transform(input)
+        xb = input
+        # batch matrix multiplication
+
+        xb = torch.bmm(torch.transpose(input,1,2), matrix3x3).transpose(1,2)
+
+
+        xb = F.relu(self.bn1(self.conv1(xb)))
+
+        matrix64x64 = self.feature_transform(xb)
+        xb = torch.bmm(torch.transpose(xb,1,2), matrix64x64).transpose(1,2)
+        # print(xb.size())
+
+        xb = F.relu(self.bn2(self.conv2(xb)))
+        xb = self.bn3(self.conv3(xb))
+        
+
+        
+        xb = nn.MaxPool1d(xb.size(-1))(xb)
+        output = nn.Flatten(1)(xb)
+        return output, matrix3x3, matrix64x64
+
+class PointNet_2Branch_lighted(nn.Module):
+    def __init__(self, classes = 10):
+        super().__init__()
+        self.transform = Transform()
+        self.transform2 = Transform_2Multi_new()
+        self.transform3 = DNNModel(172,512,256,128)
+        
+        self.fc1 = nn.Linear(640, 512)
+        self.fc2 = nn.Linear(512, 256)
+        self.fc3 = nn.Linear(256, classes)
+        
+
+        self.bn1 = nn.BatchNorm1d(512)
+        self.bn2 = nn.BatchNorm1d(256)
+        self.dropout = nn.Dropout(p=0.3)
+        self.logsoftmax = nn.LogSoftmax(dim=1)
+        
+        #self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+        self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
+        self.running_loss = 0
+        self.loss = None
+        self.losses = []
+
+    def forward(self, input1, input2):
+        #xb, matrix3x3, matrix64x64 = self.transform(input)
+        xa, matrix3x3, matrix64x64 = self.transform2(input1)
+        xb = self.transform3(input2)
+        
+        
+        xd = torch.cat((xa, xb), dim=1)
+        xd = F.relu(self.bn1(self.fc1(xd)))
+        xd = F.relu(self.bn2(self.dropout(self.fc2(xd))))
+        output = self.fc3(xd)
+        return self.logsoftmax(output)
+    
+    def fit(self, input1, input2, targets):
+        #train/optimize/fit
+        #print(x.size)
+        # x = x.to(torch.float32)
+        input1 = input1.squeeze(1).permute(0, 2, 1)
+        targets = targets.to(torch.long)
+        #print(targets)
+        preds = self.forward(input1,input2)
         #print(targets.dtype)
         self.loss = self.loss_fn(preds, targets)
         self.loss.backward()

@@ -94,7 +94,7 @@ class Transform(nn.Module):
         return output, matrix3x3, matrix64x64
 
 class PointNet(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.fc1 = nn.Linear(1024, 512)
@@ -108,6 +108,11 @@ class PointNet(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+            
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -144,7 +149,7 @@ class PointNet(nn.Module):
 
 
 class PointNet_2Multihead(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform()
@@ -160,6 +165,11 @@ class PointNet_2Multihead(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+            
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -252,7 +262,7 @@ class Transform_2Multi(nn.Module):
         return output, matrix3x3, matrix64x64
     
 class PointNet_3Multihead(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform()
@@ -269,6 +279,10 @@ class PointNet_3Multihead(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -313,7 +327,7 @@ class PointNet_3Multihead(nn.Module):
         return
 
 class DNNModel(nn.Module):
-    def __init__(self, input_size, hidden_size, hidden_size2, output_size):
+    def __init__(self, input_size, hidden_size, hidden_size2, output_size, optimizer = "SGD"):
         super(DNNModel, self).__init__()
 
         # Define layers
@@ -329,9 +343,11 @@ class DNNModel(nn.Module):
         self.bn1 = nn.BatchNorm1d(hidden_size)
         self.bn2 = nn.BatchNorm1d(hidden_size2)
         
-        #Adam
-        #self.optimizer = optim.Adam(self.parameters(), lr=0.001) #weight decay
-        self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+        self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.running_loss = 0
         self.loss = None
         self.losses = []
@@ -348,7 +364,7 @@ class DNNModel(nn.Module):
         return x
     
 class PointNet_3Multihead_withDNN(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform()
@@ -368,6 +384,11 @@ class PointNet_3Multihead_withDNN(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+            
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -411,7 +432,7 @@ class PointNet_3Multihead_withDNN(nn.Module):
         return
 
 class PointNet_2Multimodal_withDNN(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform_2Multi()
@@ -428,6 +449,10 @@ class PointNet_2Multimodal_withDNN(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -468,7 +493,7 @@ class PointNet_2Multimodal_withDNN(nn.Module):
         return
     
 class PointNet_2Branch(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform_2Multi()
@@ -485,6 +510,11 @@ class PointNet_2Branch(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+            
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -525,7 +555,7 @@ class PointNet_2Branch(nn.Module):
         return
     
 class PointNet_3Branch(nn.Module):
-    def __init__(self, classes = 10):
+    def __init__(self, classes = 10, optimizer = "SGD"):
         super().__init__()
         self.transform = Transform()
         self.transform2 = Transform()
@@ -545,6 +575,11 @@ class PointNet_3Branch(nn.Module):
         self.logsoftmax = nn.LogSoftmax(dim=1)
         
         self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        if optimizer == "SGD":
+            self.optimizer = optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
+        else:
+            self.optimizer = optim.Adam(self.parameters(), lr=0.00001)
+            
         self.loss_fn = nn.CrossEntropyLoss(weight = torch.tensor([0.4,0.6]))
         self.running_loss = 0
         self.loss = None
@@ -586,3 +621,5 @@ class PointNet_3Branch(nn.Module):
         self.running_loss = value
         self.losses = []
         return
+    
+    

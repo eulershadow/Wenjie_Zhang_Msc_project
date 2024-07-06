@@ -4,7 +4,7 @@ import os
 import numpy as np
 import itertools
 import math, random
-import data_process_ml
+
 random.seed = 42
 import copy
 import sys
@@ -23,6 +23,8 @@ from sklearn.metrics import confusion_matrix
 from .model_loader import reduce_mesh,mesh_to_point_cloud,vtp_to_mesh,vtp_to_point_cloud,vtp_to_point_cloud_cutvessel,vtp_to_point_cloud_cutvessel_fps,vtp_to_point_cloud_fps
 import open3d as o3d
 import pandas as pd
+
+import pointnetfunct.data_process_ml as data_process_ml
 
 class Aneuxmodel_Dataset(Dataset):
 

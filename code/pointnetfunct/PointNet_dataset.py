@@ -4,7 +4,7 @@ import os
 import numpy as np
 import itertools
 import math, random
-import data_process_ml
+
 random.seed = 42
 import copy
 import sys
@@ -23,6 +23,8 @@ from sklearn.metrics import confusion_matrix
 from .model_loader import reduce_mesh,mesh_to_point_cloud,vtp_to_mesh,vtp_to_point_cloud,vtp_to_point_cloud_cutvessel,vtp_to_point_cloud_cutvessel_fps,vtp_to_point_cloud_fps
 import open3d as o3d
 import pandas as pd
+
+import pointnetfunct.data_process_ml as data_process_ml
 
 class Aneuxmodel_Dataset(Dataset):
 
@@ -65,6 +67,7 @@ class Aneuxmodel_Dataset(Dataset):
         self.raw_data.drop(("sex_female"),axis=1,inplace=True)
         self.raw_data['age'].fillna(self.raw_data['age'].mean(), inplace=True)
         #self.raw_data.drop(("age"),axis=1,inplace=True)
+        self.pd_out = False
         
         
         if load:
@@ -220,6 +223,10 @@ class Aneuxmodel_Dataset(Dataset):
     def __getitem__(self, index):
         
         """ Returns one data pair (image and target caption). """
+        if self.pd_out:
+            data = torch.from_numpy(np.array(self.raw_data.iloc[index],dtype = np.float64))
+            label_return = self.label[index]
+            return data,label_return
         cut_model = self.cut1_model_file[index]
         vessel_model = self.vessel_model_file[index]
         vessel_model_crop = vessel_model
