@@ -1,11 +1,13 @@
-## Project files
+# Project files
 The project has been slipt into two folder code and result, 
 
 the training and testing code and files are in the code folder,
 
 results and trained models are in the result folder,
 
-the files and folder been explained below
+the files and folder in results folder been explained below
+
+## Results folder
 
 ### Datasets folder: 
 contians the processed data file, 2000 points training data file is too largre, so can be download through onedrive: https://leeds365-my.sharepoint.com/:f:/g/personal/sc20wz_leeds_ac_uk/Epe_HmD9wRpDvcMjsjm5DCsBYVcYJ3aW-nNjxXE2niLkyg?e=GnhxH6
@@ -40,5 +42,13 @@ can run different trained models and show the results using function format, but
         cuttype = "dome", # cut type: dome/cut1
         model_file = "./final_models/2000points/dome/pointnet_dome_uniform_2000pt.pth") # model file path`)
    ```
+## Code folder
 
+The code folder has similiar files with result folder, additionally  with some other files when training the model:
 
+### single_case.ipynb
+The python notebook use to show a single cases of model prediction
+
+### Other ipynotebook files
+
+Contains some of the experiment been done in the project, e.g. ablation experiments, internal test experiments, dataset creation
