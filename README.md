@@ -1,9 +1,11 @@
 # Project files
-The project has been slipt into two folder code and result, 
+The project has two folder, code and results, 
 
-the training and testing code and files are in the code folder,
+the training and testing code files are in the code folder,
 
 results and trained models are in the result folder,
+
+#### The requirements file contains the libraries used in this project, you need to install these libraries in order to test the code
 
 the files and folder in results folder been explained below
 
