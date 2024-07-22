@@ -1,7 +1,10 @@
 ## Project files
 The project has been slipt into two folder code and result, 
+
 the training and testing code and files are in the code folder,
-results and trained models are in the result folder
+
+results and trained models are in the result folder,
+
 the files and folder been explained below
 
 ### Datasets folder: 
@@ -20,9 +23,12 @@ includes some of the training loss and accuracy graph file
 include all the python function that used in this project to build, train and test the model
 
 ### DNN.ipynb: 
-a python notebook file can be run to show example of 3-layer neural network result
+a python notebook file can be run and show example of 3-layer neural network result
 
-### run_pointnet_result: 
+### Machine learning methods.ipynb.ipynb: 
+a python notebook file can be run and show example of different Machine learning methods result
+
+### run_pointnet_resul.ipynb: 
 can run different trained models and show the results using function format, but need to import the test_application.py first: 
 
 1. import functions ```import test_application as ta ```
@@ -34,4 +40,5 @@ can run different trained models and show the results using function format, but
         cuttype = "dome", # cut type: dome/cut1
         model_file = "./final_models/2000points/dome/pointnet_dome_uniform_2000pt.pth") # model file path`)
    ```
+
 
