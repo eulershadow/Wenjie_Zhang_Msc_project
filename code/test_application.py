@@ -104,7 +104,7 @@ def output_result(points = 1000, sample = "uniform", model_type = "pointnet", cu
         
     torch.manual_seed(32381912834800)
     #load training test and validation set
-    train_size = int(len(Dataset) * 0.8) # 80% training data
+    train_size = int(len(Dataset) * 0.85) # 80% training data
     valid_size = len(Dataset) - train_size
     train_data, valid_data = random_split(Dataset, [train_size, valid_size])
 

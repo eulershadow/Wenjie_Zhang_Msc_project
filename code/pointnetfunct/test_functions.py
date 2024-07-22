@@ -44,12 +44,12 @@ def pointnet_2branch_testcase(model_path,loader):
     pointnet_copy = pointnet_copy.to("cpu")
     with torch.no_grad():
         for inputs_v,inputs_v2,inputs_v3,labels in loader:
-            inputs_v = inputs_v.to(torch.float32)
-            inputs_v = inputs_v.squeeze(1).permute(0, 2, 1)
+            inputs_v2 = inputs_v2.to(torch.float32)
+            inputs_v2 = inputs_v2.squeeze(1).permute(0, 2, 1)
             inputs_v3 = inputs_v3.to(torch.float32)
 
             labels = labels.to(torch.long)
-            outputs = pointnet_copy.forward(inputs_v,inputs_v3)
+            outputs = pointnet_copy.forward(inputs_v2,inputs_v3)
             
             #print(torch.exp(outputs))
 
