@@ -17,7 +17,9 @@ the files and folder in results folder been explained below
 ## Results folder
 
 ### Datasets folder: 
-contians the processed data file, 2000 points training data file is too largre, so can be download through onedrive: https://leeds365-my.sharepoint.com/:f:/g/personal/sc20wz_leeds_ac_uk/Epe_HmD9wRpDvcMjsjm5DCsBYVcYJ3aW-nNjxXE2niLkyg?e=GnhxH6
+contians the processed data file, 2000 points training data file is too large, so can please download through onedrive: https://leeds365-my.sharepoint.com/:f:/g/personal/sc20wz_leeds_ac_uk/Epe_HmD9wRpDvcMjsjm5DCsBYVcYJ3aW-nNjxXE2niLkyg?e=GnhxH6
+
+After download, please put the folder in result and code folder in order to run the functions
 
 ### final models: 
 contains all the trained models in this project
